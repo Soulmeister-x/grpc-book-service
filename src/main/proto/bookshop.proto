@@ -1,0 +1,47 @@
+/* for proto file message syntax details see: https://developers.google.com/protocol-buffers/docs/proto3 */
+/* and for proto file gRPC service synctax see: https://grpc.io/docs/what-is-grpc/introduction */
+
+/* generate message class code: using protoc compiler (for message types) with protoc-gen-grpc-java plugin (for gRPC Stub code generation) */
+/* command:
+  mvn clean package
+*/
+
+syntax = "proto3";
+
+option java_package = "home.oehler.grpc";
+
+message Empty {
+}
+message IdRequest {
+    int32 id = 1;
+}
+message IdResponse {
+    int32 id = 1;
+}
+message BookResponse {
+    int32 id = 1;
+    string title = 2;
+    string author = 3;
+}
+service BookService {
+    rpc getAllBooks(Empty) returns (stream BookResponse);
+    rpc getBook(IdRequest) returns (BookResponse);
+}
+
+
+message OrderItem {
+    int32 bookId = 1;
+    int32 amount = 2;
+}
+message OrderRequest {
+    repeated OrderItem orders = 1;
+}
+message OrderResponse {
+    int32 orderId = 1;
+    repeated OrderItem orders = 2;
+}
+service OrderService {
+    rpc getAllOrders(Empty) returns (stream OrderResponse);
+    rpc getOrder(IdRequest) returns (OrderResponse);
+    rpc createOrder(OrderRequest) returns (IdResponse);
+}
